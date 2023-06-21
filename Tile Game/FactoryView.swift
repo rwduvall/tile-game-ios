@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct Factories {
-    var factory1: [String]
-    var factory2: [String]
-    var factory3: [String]
-    var factory4: [String]
+    var factory1: [LineOptions]
+    var factory2: [LineOptions]
+    var factory3: [LineOptions]
+    var factory4: [LineOptions]
     
-    mutating func filterFactory(factoryName: String, filterClosure: (String) -> Bool) -> [String] {
-        var filteredArray: [String] = []
+    mutating func filterFactory(factoryName: String, filterClosure: (LineOptions) -> Bool) -> [LineOptions] {
+        var filteredArray: [LineOptions] = []
         
         switch factoryName {
         case "factory1":
@@ -34,12 +34,17 @@ struct Factories {
 }
 
 struct FactoryView: View {
-    @State private var factories: Factories = Factories(factory1: ["yellowTile", "redTile", "blackTile", "whiteTile"], factory2: ["yellowTile", "yellowTile", "blackTile", "whiteTile"], factory3: ["redTile", "redTile", "blackTile", "redTile"], factory4: ["yellowTile", "redTile", "blackTile", "whiteTile"])
+    @State private var factories: Factories = Factories(
+        factory1: [.yellow, .red, .black, .white],
+        factory2: [.white, .red, .black, .white],
+        factory3: [.red, .red, .yellow, .black],
+        factory4: [.blue, .white, .black, .red]
+    )
     
-    @State private var selectedTile = ""
+    @State private var selectedTile = LineOptions.emptySpace
     @State private var filteredFac = []
 
-    func getTile(from factory: Array<String>, placement: Int) -> some View {
+    func getTile(from factory: Array<LineOptions>, placement: Int) -> some View {
         // I should add this later to make sure I don't cause errors or protect against this some how
 //        guard placement > 3 else {
 //            throw MyError.invalidInput
@@ -63,7 +68,7 @@ struct FactoryView: View {
 //            })
             
         }, label: {
-            Image(factory[placement])
+            Image(factory[placement].rawValue)
                 .resizable()
                 .frame(width: 44, height: 44)
         })

@@ -16,6 +16,7 @@
 		0051D2232A36AD2E0068AE62 /* Tile_GameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2222A36AD2E0068AE62 /* Tile_GameUITests.swift */; };
 		0051D2252A36AD2E0068AE62 /* Tile_GameUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2242A36AD2E0068AE62 /* Tile_GameUITestsLaunchTests.swift */; };
 		0051D2322A36AD850068AE62 /* FactoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2312A36AD850068AE62 /* FactoryView.swift */; };
+		005C51462A4299630089C010 /* WallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005C51452A4299630089C010 /* WallView.swift */; };
 		00E95C292A395C470031B2A3 /* PlayerBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E95C282A395C470031B2A3 /* PlayerBoardView.swift */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,7 @@
 		0051D2222A36AD2E0068AE62 /* Tile_GameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile_GameUITests.swift; sourceTree = "<group>"; };
 		0051D2242A36AD2E0068AE62 /* Tile_GameUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile_GameUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		0051D2312A36AD850068AE62 /* FactoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactoryView.swift; sourceTree = "<group>"; };
+		005C51452A4299630089C010 /* WallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallView.swift; sourceTree = "<group>"; };
 		00E95C282A395C470031B2A3 /* PlayerBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBoardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,6 +109,7 @@
 				0051D20B2A36AD2E0068AE62 /* Preview Content */,
 				0051D2312A36AD850068AE62 /* FactoryView.swift */,
 				00E95C282A395C470031B2A3 /* PlayerBoardView.swift */,
+				005C51452A4299630089C010 /* WallView.swift */,
 			);
 			path = "Tile Game";
 			sourceTree = "<group>";
@@ -266,6 +269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				005C51462A4299630089C010 /* WallView.swift in Sources */,
 				0051D2082A36AD2D0068AE62 /* ContentView.swift in Sources */,
 				0051D2322A36AD850068AE62 /* FactoryView.swift in Sources */,
 				0051D20F2A36AD2E0068AE62 /* Item.swift in Sources */,
