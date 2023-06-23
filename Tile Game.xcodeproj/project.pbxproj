@@ -17,6 +17,7 @@
 		0051D2252A36AD2E0068AE62 /* Tile_GameUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2242A36AD2E0068AE62 /* Tile_GameUITestsLaunchTests.swift */; };
 		0051D2322A36AD850068AE62 /* FactoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2312A36AD850068AE62 /* FactoryView.swift */; };
 		005C51462A4299630089C010 /* WallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005C51452A4299630089C010 /* WallView.swift */; };
+		00D0357F2A43AE4D00B74E7A /* WallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D0357E2A43AE4D00B74E7A /* WallViewModel.swift */; };
 		00E95C292A395C470031B2A3 /* PlayerBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E95C282A395C470031B2A3 /* PlayerBoardView.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +52,7 @@
 		0051D2242A36AD2E0068AE62 /* Tile_GameUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile_GameUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		0051D2312A36AD850068AE62 /* FactoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactoryView.swift; sourceTree = "<group>"; };
 		005C51452A4299630089C010 /* WallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallView.swift; sourceTree = "<group>"; };
+		00D0357E2A43AE4D00B74E7A /* WallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallViewModel.swift; sourceTree = "<group>"; };
 		00E95C282A395C470031B2A3 /* PlayerBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBoardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -110,6 +112,7 @@
 				0051D2312A36AD850068AE62 /* FactoryView.swift */,
 				00E95C282A395C470031B2A3 /* PlayerBoardView.swift */,
 				005C51452A4299630089C010 /* WallView.swift */,
+				00D0357E2A43AE4D00B74E7A /* WallViewModel.swift */,
 			);
 			path = "Tile Game";
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 				0051D2322A36AD850068AE62 /* FactoryView.swift in Sources */,
 				0051D20F2A36AD2E0068AE62 /* Item.swift in Sources */,
 				00E95C292A395C470031B2A3 /* PlayerBoardView.swift in Sources */,
+				00D0357F2A43AE4D00B74E7A /* WallViewModel.swift in Sources */,
 				0051D2062A36AD2D0068AE62 /* Tile_GameApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

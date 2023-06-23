@@ -17,7 +17,7 @@ enum LineOptions: String {
 }
 
 struct Lines {
-    var rowOne: (LineOptions)
+    var rowOne: LineOptions
     var rowTwo: (tile1Color: LineOptions, tile2Color: LineOptions)
     var rowThree: (tile1Color: LineOptions, tile2Color: LineOptions, tile3Color: LineOptions)
     var rowFour: (tile1Color: LineOptions, tile2Color: LineOptions, tile3Color: LineOptions, tile4Color: LineOptions)
@@ -27,6 +27,8 @@ struct Lines {
 
 struct PlayerBoardView: View {
     @Binding var selectedTile: LineOptions
+    @Binding var numberOfPlacedTiles: Int
+    
     @State private var playerLines: Lines = Lines(
         rowOne: .emptySpace,
         rowTwo: (tile1Color: .emptySpace, tile2Color: .emptySpace),
@@ -48,43 +50,43 @@ struct PlayerBoardView: View {
     
     func endRound() -> some View {
         Button(action: {
-
-            switch playerLines.rowOne {
-            case .blue:
-                wall.rowOne[0].occupied = true
-            case .yellow:
-                wall.rowOne[1].occupied = true
-            case .red:
-                wall.rowOne[2].occupied = true
-            case .black:
-                wall.rowOne[3].occupied = true
-            case .white:
-                wall.rowOne[4].occupied = true
-            case .emptySpace:
-                break
-            }
-            // safe to set to empty since this is line 1
-            playerLines.rowOne = .emptySpace
-            
-            if (playerLines.rowTwo.tile1Color == playerLines.rowTwo.tile2Color) {
-                switch playerLines.rowTwo.tile1Color {
-                case .white:
-                    wall.rowTwo[0].occupied = true
+                switch playerLines.rowOne {
                 case .blue:
-                    wall.rowTwo[1].occupied = true
+                    wall.rowOne[0].occupied = true
                 case .yellow:
-                    wall.rowTwo[2].occupied = true
+                    wall.rowOne[1].occupied = true
                 case .red:
-                    wall.rowTwo[3].occupied = true
+                    wall.rowOne[2].occupied = true
                 case .black:
-                    wall.rowTwo[4].occupied = true
+                    wall.rowOne[3].occupied = true
+                case .white:
+                    wall.rowOne[4].occupied = true
                 case .emptySpace:
                     break
                 }
-                playerLines.rowTwo.tile1Color = .emptySpace
-                playerLines.rowTwo.tile2Color = .emptySpace
-            }
-            // TODO: the rest of the rows
+                // safe to set to empty since this is line 1
+                playerLines.rowOne = .emptySpace
+                
+                if (playerLines.rowTwo.tile1Color == playerLines.rowTwo.tile2Color) {
+                    switch playerLines.rowTwo.tile1Color {
+                    case .white:
+                        wall.rowTwo[0].occupied = true
+                    case .blue:
+                        wall.rowTwo[1].occupied = true
+                    case .yellow:
+                        wall.rowTwo[2].occupied = true
+                    case .red:
+                        wall.rowTwo[3].occupied = true
+                    case .black:
+                        wall.rowTwo[4].occupied = true
+                    case .emptySpace:
+                        break
+                    }
+                    playerLines.rowTwo.tile1Color = .emptySpace
+                    playerLines.rowTwo.tile2Color = .emptySpace
+                }
+                // TODO: the rest of the rows
+//            }
 
         }, label: {
             Text("end round")
@@ -96,7 +98,7 @@ struct PlayerBoardView: View {
             endRound()
             // section where you play tiles
             HStack {
-                Grid(alignment: .leading) {
+                Grid(alignment: .trailing) {
                     GridRow {
                         // Spacer to push the content the right
                         ForEach(1..<5) { i in
@@ -242,5 +244,5 @@ struct PlayerBoardView: View {
 }
 
 #Preview {
-    PlayerBoardView(selectedTile: .constant(LineOptions.red))
+    PlayerBoardView(selectedTile: .constant(LineOptions.red), numberOfPlacedTiles: .constant(1))
 }
