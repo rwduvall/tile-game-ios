@@ -16,13 +16,22 @@ enum LineOptions: String {
     case yellow = "yellowTile"
 }
 
-struct Lines {
-    var rowOne: LineOptions
-    var rowTwo: (tile1Color: LineOptions, tile2Color: LineOptions)
-    var rowThree: (tile1Color: LineOptions, tile2Color: LineOptions, tile3Color: LineOptions)
-    var rowFour: (tile1Color: LineOptions, tile2Color: LineOptions, tile3Color: LineOptions, tile4Color: LineOptions)
-    var rowFive: (tile1Color: LineOptions, tile2Color: LineOptions, tile3Color: LineOptions, tile4Color: LineOptions, tile5Color: LineOptions)
+struct Line {
+    var numOfSpaces: Int
+    var numOfOccupiedSpaces: Int
+    var color: LineOptions
     
+    func numberOfEmptySpaces() -> Int {
+        return numOfSpaces - numOfOccupiedSpaces
+    }
+}
+
+struct Lines {
+    var rowOne: Line
+    var rowTwo: Line
+    var rowThree: Line
+    var rowFour: Line
+    var rowFive: Line
 }
 
 struct PlayerBoardView: View {
@@ -30,27 +39,18 @@ struct PlayerBoardView: View {
     @Binding var numberOfPlacedTiles: Int
     
     @State private var playerLines: Lines = Lines(
-        rowOne: .emptySpace,
-        rowTwo: (tile1Color: .emptySpace, tile2Color: .emptySpace),
-        rowThree: (tile1Color: .emptySpace, tile2Color: .emptySpace, tile3Color: .emptySpace),
-        rowFour: (tile1Color: .emptySpace, tile2Color: .emptySpace, tile3Color: .emptySpace, tile4Color: .emptySpace),
-        rowFive: (tile1Color: .emptySpace, tile2Color: .emptySpace, tile3Color: .emptySpace, tile4Color: .emptySpace, tile5Color: .emptySpace)
+        rowOne: Line(numOfSpaces: 1, numOfOccupiedSpaces: 0, color: .emptySpace),
+        rowTwo: Line(numOfSpaces: 2, numOfOccupiedSpaces: 0, color: .emptySpace),
+        rowThree: Line(numOfSpaces: 3, numOfOccupiedSpaces: 0, color: .emptySpace),
+        rowFour: Line(numOfSpaces: 4, numOfOccupiedSpaces: 0, color: .emptySpace),
+        rowFive: Line(numOfSpaces: 5, numOfOccupiedSpaces: 0, color: .emptySpace)
     )
     @State private var wall = WallModel()
     @State private var occupied = false
     
-    func boardSpace() -> some View {
-        return Button(action: {
-        }, label: {
-            Image(.emptySpace)
-                .resizable()
-                .frame(width: 44, height: 44)
-        })
-    }
-    
     func endRound() -> some View {
         Button(action: {
-                switch playerLines.rowOne {
+            switch playerLines.rowOne.color {
                 case .blue:
                     wall.rowOne[0].occupied = true
                 case .yellow:
@@ -65,10 +65,10 @@ struct PlayerBoardView: View {
                     break
                 }
                 // safe to set to empty since this is line 1
-                playerLines.rowOne = .emptySpace
+            playerLines.rowOne.color = .emptySpace
                 
-                if (playerLines.rowTwo.tile1Color == playerLines.rowTwo.tile2Color) {
-                    switch playerLines.rowTwo.tile1Color {
+            if (playerLines.rowTwo.color == playerLines.rowTwo.color) {
+                    switch playerLines.rowTwo.color {
                     case .white:
                         wall.rowTwo[0].occupied = true
                     case .blue:
@@ -82,8 +82,8 @@ struct PlayerBoardView: View {
                     case .emptySpace:
                         break
                     }
-                    playerLines.rowTwo.tile1Color = .emptySpace
-                    playerLines.rowTwo.tile2Color = .emptySpace
+                    playerLines.rowTwo.color = .emptySpace
+                    playerLines.rowTwo.color = .emptySpace
                 }
                 // TODO: the rest of the rows
 //            }
@@ -93,155 +93,63 @@ struct PlayerBoardView: View {
         })
     }
     
+    struct createRow: View {
+        @Binding var line: Line
+        @Binding var numOfPlacedTiles: Int
+        @Binding var newColor: LineOptions
+        @State var isAlertShown = false
+        
+        var body: some View {
+            HStack {
+                // TODO: handle for more items than can fit
+                // TODO: guard for color match
+
+                ForEach(0..<line.numberOfEmptySpaces(), id: \.self) { _ in
+                    Button(action: {
+                        guard line.color == newColor || line.color == LineOptions.emptySpace else {
+                            isAlertShown = true
+                            return
+                        }
+                        
+                        line.color = newColor
+                        line.numOfOccupiedSpaces = numOfPlacedTiles + line.numOfOccupiedSpaces
+                    }, label: {
+                        Image(.emptySpace) // setting this color wrong
+                            .resizable()
+                            .frame(width: 44, height: 44)
+                    })
+                    .alert(isPresented: $isAlertShown, content: {
+                        Alert(title: Text("That can't go here"), message: Text("Put tiles in a differnt row that is empty or has matching colors"), dismissButton: .default(Text("OK")))
+                    })
+                }
+                
+                ForEach(0..<line.numOfOccupiedSpaces, id: \.self) { _ in
+                    Image(line.color.rawValue)
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                }
+            }
+        }
+    }
+    
     var body: some View {
         ScrollView(.horizontal) {
             endRound()
             // section where you play tiles
             HStack {
                 Grid(alignment: .trailing) {
-                    GridRow {
-                        // Spacer to push the content the right
-                        ForEach(1..<5) { i in
-                            Spacer().gridCellUnsizedAxes([.horizontal, .vertical])
-                        }
-                        
-                        Button(action: {
-                            playerLines.rowOne = selectedTile
-                        }, label: {
-                            Image(playerLines.rowOne.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                    }
-                    GridRow {
-                        // Spacer to push the content the right
-                        ForEach(1..<4) { i in
-                            Spacer().gridCellUnsizedAxes([.horizontal, .vertical])
-                        }
-                        
-                        Button(action: {
-                            playerLines.rowTwo.tile1Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowTwo.tile1Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        Button(action: {
-                            playerLines.rowTwo.tile2Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowTwo.tile2Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                    }
-                    GridRow {
-                        // Spacer to push the content the right
-                        ForEach(1..<3) { i in
-                            Spacer().gridCellUnsizedAxes([.horizontal, .vertical])
-                        }
-                        
-                        Button(action: {
-                            playerLines.rowThree.tile1Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowThree.tile1Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        Button(action: {
-                            playerLines.rowThree.tile2Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowThree.tile2Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        Button(action: {
-                            playerLines.rowThree.tile3Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowThree.tile3Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                    }
-                    GridRow {
-                        // Spacer to push the content the right
-                        Spacer().gridCellUnsizedAxes([.horizontal, .vertical])
-                        
-                        Button(action: {
-                            playerLines.rowFour.tile1Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowFour.tile1Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        Button(action: {
-                            playerLines.rowFour.tile2Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowFour.tile2Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        Button(action: {
-                            playerLines.rowFour.tile3Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowFour.tile3Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        Button(action: {
-                            playerLines.rowFour.tile4Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowFour.tile4Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        
-                        
-                    }
-                    GridRow {
-                        // row 5
-                        Button(action: {
-                            playerLines.rowFive.tile1Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowFive.tile1Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        Button(action: {
-                            playerLines.rowFive.tile2Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowFive.tile2Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        Button(action: {
-                            playerLines.rowFive.tile3Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowFive.tile3Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        Button(action: {
-                            playerLines.rowFive.tile4Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowFive.tile4Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-                        Button(action: {
-                            playerLines.rowFive.tile5Color = selectedTile
-                        }, label: {
-                            Image(playerLines.rowFive.tile5Color.rawValue)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                        })
-
-                    }
+                    createRow(line: $playerLines.rowOne, numOfPlacedTiles: $numberOfPlacedTiles, newColor: $selectedTile)
+                    createRow(line: $playerLines.rowTwo, numOfPlacedTiles: $numberOfPlacedTiles, newColor: $selectedTile)
+                    createRow(line: $playerLines.rowThree, numOfPlacedTiles: $numberOfPlacedTiles, newColor: $selectedTile)
+                    createRow(line: $playerLines.rowFour, numOfPlacedTiles: $numberOfPlacedTiles, newColor: $selectedTile)
+                    createRow(line: $playerLines.rowFive, numOfPlacedTiles: $numberOfPlacedTiles, newColor: $selectedTile)
                 }
                 WallView(spaceOccupied: $occupied, wall: $wall)
             }
         }
     }
 }
+
 
 #Preview {
     PlayerBoardView(selectedTile: .constant(LineOptions.red), numberOfPlacedTiles: .constant(1))
