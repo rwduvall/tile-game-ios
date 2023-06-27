@@ -12,8 +12,18 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     
+    @State private var selectedTile = LineOptions.emptySpace
+    @State private var numberOfSelectedTiles = 0
+
     var body: some View {
-        FactoryView()
+        ScrollView {
+            FactoryView(selectedTile: $selectedTile, numberOfSelectedTiles: $numberOfSelectedTiles)
+            Text("Player 1")
+            PlayerBoardView(selectedTile: $selectedTile, numberOfPlacedTiles: $numberOfSelectedTiles)
+            Spacer(minLength: 30)
+            Text("Player 2")
+            PlayerBoardView(selectedTile: $selectedTile, numberOfPlacedTiles: $numberOfSelectedTiles)
+        }
     }
 }
 

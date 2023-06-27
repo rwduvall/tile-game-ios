@@ -52,8 +52,8 @@ struct FactoryView: View {
         factory4: [.blue, .white, .black, .red]
     )
     
-    @State private var selectedTile = LineOptions.emptySpace
-    @State private var numberOfSelectedTiles = 0
+    @Binding var selectedTile: LineOptions
+    @Binding var numberOfSelectedTiles: Int
     @State private var filteredFac = []
 
     func getTile(from factory: Array<LineOptions>, placement: Int, factoryName: String) -> some View {
@@ -140,11 +140,6 @@ struct FactoryView: View {
                     }
                 }
             }
-            Text("Player 1")
-            PlayerBoardView(selectedTile: $selectedTile, numberOfPlacedTiles: $numberOfSelectedTiles)
-            Spacer(minLength: 30)
-            Text("Player 2")
-            PlayerBoardView(selectedTile: $selectedTile, numberOfPlacedTiles: $numberOfSelectedTiles)
         }
     }
 }
@@ -154,5 +149,5 @@ enum MyError: Error {
 }
 
 #Preview {
-    FactoryView()
+    FactoryView(selectedTile: .constant(.black), numberOfSelectedTiles: .constant(1))
 }
