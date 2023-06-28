@@ -13,7 +13,7 @@ struct Tile_GameApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(numberOfSelectedTiles: 0)
         }
         .modelContainer(for: Item.self)
     }

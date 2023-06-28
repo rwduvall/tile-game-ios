@@ -50,10 +50,10 @@ struct WallModel {
     
     struct Space {
         var occupied: Bool
-        var color: WallColor
+        var color: TileColor
     }
     
-    enum WallColor: String {
+    enum TileColor: String {
         case blue = "blueTile"
         case black = "blackTile"
         case red = "redTile"

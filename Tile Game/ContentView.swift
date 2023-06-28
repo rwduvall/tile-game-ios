@@ -13,7 +13,7 @@ struct ContentView: View {
     @Query private var items: [Item]
     
     @State private var selectedTile = LineOptions.emptySpace
-    @State private var numberOfSelectedTiles = 0
+    @State var numberOfSelectedTiles: Int
 
     var body: some View {
         ScrollView {
@@ -28,5 +28,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(numberOfSelectedTiles: 2)
 }

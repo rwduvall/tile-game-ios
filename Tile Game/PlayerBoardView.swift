@@ -47,6 +47,7 @@ struct PlayerBoardView: View {
     )
     @State private var wall = WallModel()
     @State private var occupied = false
+    @State private var floorRow: [LineOptions] = []
     
     func endRound() -> some View {
         Button(action: {
@@ -97,13 +98,15 @@ struct PlayerBoardView: View {
         @Binding var line: Line
         @Binding var numOfPlacedTiles: Int
         @Binding var newColor: LineOptions
+        @Binding var floorTiles: [LineOptions]
         @State var isAlertShown = false
         
         var body: some View {
             HStack {
                 // TODO: handle for more items than can fit
-                // TODO: guard for color match
 
+                // This creates the empty spaces
+                // I have a crash here when I try to put too many things in a row, need to fix that
                 ForEach(0..<line.numberOfEmptySpaces(), id: \.self) { _ in
                     Button(action: {
                         guard line.color == newColor || line.color == LineOptions.emptySpace else {
@@ -113,6 +116,13 @@ struct PlayerBoardView: View {
                         
                         line.color = newColor
                         line.numOfOccupiedSpaces = numOfPlacedTiles + line.numOfOccupiedSpaces
+
+                        // Tiles to floor is numOfPlaced -  freeSpaces
+                        // I have a bug when the number of tiles placed = the length of the line
+                        let numberOfTilesToFLoor = numOfPlacedTiles - (line.numOfSpaces - line.numOfOccupiedSpaces)
+                        for _ in 0..<numberOfTilesToFLoor {
+                            self.floorTiles.append(newColor)
+                        }
                     }, label: {
                         Image(.emptySpace) // setting this color wrong
                             .resizable()
@@ -123,7 +133,9 @@ struct PlayerBoardView: View {
                     })
                 }
                 
+                // This creates the tiles in the rows
                 ForEach(0..<line.numOfOccupiedSpaces, id: \.self) { _ in
+                    // if you tap this while placing a tile the tile just goes away
                     Image(line.color.rawValue)
                         .resizable()
                         .frame(width: 44, height: 44)
@@ -137,12 +149,45 @@ struct PlayerBoardView: View {
             endRound()
             // section where you play tiles
             HStack {
-                Grid(alignment: .trailing) {
-                    createRow(line: $playerLines.rowOne, numOfPlacedTiles: $numberOfPlacedTiles, newColor: $selectedTile)
-                    createRow(line: $playerLines.rowTwo, numOfPlacedTiles: $numberOfPlacedTiles, newColor: $selectedTile)
-                    createRow(line: $playerLines.rowThree, numOfPlacedTiles: $numberOfPlacedTiles, newColor: $selectedTile)
-                    createRow(line: $playerLines.rowFour, numOfPlacedTiles: $numberOfPlacedTiles, newColor: $selectedTile)
-                    createRow(line: $playerLines.rowFive, numOfPlacedTiles: $numberOfPlacedTiles, newColor: $selectedTile)
+                VStack {
+                    Grid(alignment: .trailing) {
+                        createRow(
+                            line: $playerLines.rowOne,
+                            numOfPlacedTiles: $numberOfPlacedTiles,
+                            newColor: $selectedTile,
+                            floorTiles: $floorRow
+                        )
+                        createRow(
+                            line: $playerLines.rowTwo,
+                            numOfPlacedTiles: $numberOfPlacedTiles,
+                            newColor: $selectedTile,
+                            floorTiles: $floorRow
+                        )
+                        createRow(
+                            line: $playerLines.rowThree,
+                            numOfPlacedTiles: $numberOfPlacedTiles,
+                            newColor: $selectedTile,
+                            floorTiles: $floorRow
+                        )
+                        createRow(
+                            line: $playerLines.rowFour,
+                            numOfPlacedTiles: $numberOfPlacedTiles,
+                            newColor: $selectedTile,
+                            floorTiles: $floorRow
+                        )
+                        createRow(
+                            line: $playerLines.rowFive,
+                            numOfPlacedTiles: $numberOfPlacedTiles,
+                            newColor: $selectedTile,
+                            floorTiles: $floorRow
+                        )
+                    }
+                    // This creates the floor row
+                    ForEach(floorRow, id: \.self) { floorTile in
+                        Image(floorTile.rawValue)
+                            .resizable()
+                            .frame(width: 44, height: 44)
+                    }
                 }
                 WallView(spaceOccupied: $occupied, wall: $wall)
             }
