@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		004794F62B73C8CC00AF6FB8 /* DragAndDropTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004794F52B73C8CC00AF6FB8 /* DragAndDropTest.swift */; };
 		0051D2062A36AD2D0068AE62 /* Tile_GameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2052A36AD2D0068AE62 /* Tile_GameApp.swift */; };
 		0051D2082A36AD2D0068AE62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2072A36AD2D0068AE62 /* ContentView.swift */; };
 		0051D20A2A36AD2E0068AE62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0051D2092A36AD2E0068AE62 /* Assets.xcassets */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		004794F52B73C8CC00AF6FB8 /* DragAndDropTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragAndDropTest.swift; sourceTree = "<group>"; };
 		0051D2022A36AD2D0068AE62 /* Tile Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tile Game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0051D2052A36AD2D0068AE62 /* Tile_GameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile_GameApp.swift; sourceTree = "<group>"; };
 		0051D2072A36AD2D0068AE62 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				00E95C282A395C470031B2A3 /* PlayerBoardView.swift */,
 				005C51452A4299630089C010 /* WallView.swift */,
 				00D0357E2A43AE4D00B74E7A /* WallViewModel.swift */,
+				004794F52B73C8CC00AF6FB8 /* DragAndDropTest.swift */,
 			);
 			path = "Tile Game";
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				0051D20F2A36AD2E0068AE62 /* Item.swift in Sources */,
 				00E95C292A395C470031B2A3 /* PlayerBoardView.swift in Sources */,
 				00D0357F2A43AE4D00B74E7A /* WallViewModel.swift in Sources */,
+				004794F62B73C8CC00AF6FB8 /* DragAndDropTest.swift in Sources */,
 				0051D2062A36AD2D0068AE62 /* Tile_GameApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

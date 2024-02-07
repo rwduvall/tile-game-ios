@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum LineOptions: String {
+enum LineOption: String, Equatable {
     case emptySpace = "emptySpace"
     case blue = "blueTile"
     case black = "blackTile"
@@ -19,7 +19,7 @@ enum LineOptions: String {
 struct Line {
     var numOfSpaces: Int
     var numOfOccupiedSpaces: Int
-    var color: LineOptions
+    var color: LineOption
     
     func numberOfEmptySpaces() -> Int {
         return numOfSpaces - numOfOccupiedSpaces
@@ -35,8 +35,7 @@ struct Lines {
 }
 
 struct PlayerBoardView: View {
-    @Binding var selectedTile: LineOptions
-    @Binding var numberOfPlacedTiles: Int
+    @Binding var selectedTile: LineOption
     
     @State private var playerLines: Lines = Lines(
         rowOne: Line(numOfSpaces: 1, numOfOccupiedSpaces: 0, color: .emptySpace),
@@ -47,7 +46,7 @@ struct PlayerBoardView: View {
     )
     @State private var wall = WallModel()
     @State private var occupied = false
-    @State private var floorRow: [LineOptions] = []
+    @State private var floorRow: [LineOption] = []
     
     func endRound() -> some View {
         Button(action: {
@@ -96,51 +95,50 @@ struct PlayerBoardView: View {
     
     struct createRow: View {
         @Binding var line: Line
-        @Binding var numOfPlacedTiles: Int
-        @Binding var newColor: LineOptions
-        @Binding var floorTiles: [LineOptions]
+        @Binding var newColor: LineOption
+        @Binding var floorTiles: [LineOption]
         @State var isAlertShown = false
+        @State var isDropTargeted = false
         
         var body: some View {
             HStack {
-                // TODO: handle for more items than can fit
-
-                // This creates the empty spaces
-                // I have a crash here when I try to put too many things in a row, need to fix that
-                ForEach(0..<line.numberOfEmptySpaces(), id: \.self) { _ in
-                    Button(action: {
-                        guard line.color == newColor || line.color == LineOptions.emptySpace else {
-                            isAlertShown = true
-                            return
+                ForEach(0..<self.line.numberOfEmptySpaces(), id: \.self) { _ in
+                    Image(LineOption.emptySpace.rawValue)
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                        .dropDestination(for: String.self) {
+                            receivedString,
+                            _ in
+                            if let droppedTile = LineOption(
+                                rawValue: receivedString.first ?? LineOption.emptySpace.rawValue
+                            ) {
+                                if droppedTile == .emptySpace {
+                                    return false
+                                }
+                                if self.line.color != .emptySpace && droppedTile != self.line.color {
+                                    isAlertShown = true
+                                    return false
+                                }
+                                self.line.color = droppedTile
+                                line.numOfOccupiedSpaces += 1
+                                return true
+                            }
+                            return false
+                        } isTargeted: {
+                            isDropTargeted = $0
                         }
-                        
-                        line.color = newColor
-                        line.numOfOccupiedSpaces = numOfPlacedTiles + line.numOfOccupiedSpaces
-
-                        // Tiles to floor is numOfPlaced -  freeSpaces
-                        // I have a bug when the number of tiles placed = the length of the line
-                        let numberOfTilesToFLoor = numOfPlacedTiles - (line.numOfSpaces - line.numOfOccupiedSpaces)
-                        for _ in 0..<numberOfTilesToFLoor {
-                            self.floorTiles.append(newColor)
-                        }
-                    }, label: {
-                        Image(.emptySpace) // setting this color wrong
-                            .resizable()
-                            .frame(width: 44, height: 44)
-                    })
-                    .alert(isPresented: $isAlertShown, content: {
-                        Alert(title: Text("That can't go here"), message: Text("Put tiles in a differnt row that is empty or has matching colors"), dismissButton: .default(Text("OK")))
-                    })
+                        .opacity(isDropTargeted ? 0.5 : 0.9)
                 }
                 
-                // This creates the tiles in the rows
-                ForEach(0..<line.numOfOccupiedSpaces, id: \.self) { _ in
-                    // if you tap this while placing a tile the tile just goes away
-                    Image(line.color.rawValue)
+                ForEach(0..<self.line.numOfOccupiedSpaces, id: \.self) { _ in
+                    Image(self.line.color.rawValue)
                         .resizable()
                         .frame(width: 44, height: 44)
                 }
             }
+            .alert(isPresented: $isAlertShown, content: {
+                Alert(title: Text("That can't go here"), message: Text("Put tiles in a different row that is empty or has matching colors"), dismissButton: .default(Text("OK")))
+            })
         }
     }
     
@@ -153,31 +151,26 @@ struct PlayerBoardView: View {
                     Grid(alignment: .trailing) {
                         createRow(
                             line: $playerLines.rowOne,
-                            numOfPlacedTiles: $numberOfPlacedTiles,
                             newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
                             line: $playerLines.rowTwo,
-                            numOfPlacedTiles: $numberOfPlacedTiles,
                             newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
                             line: $playerLines.rowThree,
-                            numOfPlacedTiles: $numberOfPlacedTiles,
                             newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
                             line: $playerLines.rowFour,
-                            numOfPlacedTiles: $numberOfPlacedTiles,
                             newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
                             line: $playerLines.rowFive,
-                            numOfPlacedTiles: $numberOfPlacedTiles,
                             newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
@@ -197,5 +190,5 @@ struct PlayerBoardView: View {
 
 
 #Preview {
-    PlayerBoardView(selectedTile: .constant(LineOptions.red), numberOfPlacedTiles: .constant(1))
+    PlayerBoardView(selectedTile: .constant(LineOption.red))
 }

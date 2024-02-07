@@ -9,24 +9,21 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-    
-    @State private var selectedTile = LineOptions.emptySpace
-    @State var numberOfSelectedTiles: Int
+    @State private var selectedTile = LineOption.emptySpace
 
     var body: some View {
         ScrollView {
-            FactoryView(selectedTile: $selectedTile, numberOfSelectedTiles: $numberOfSelectedTiles)
+//            DragAndDropTest()
+            FactoryView(selectedTile: $selectedTile)
             Text("Player 1")
-            PlayerBoardView(selectedTile: $selectedTile, numberOfPlacedTiles: $numberOfSelectedTiles)
+            PlayerBoardView(selectedTile: $selectedTile)
             Spacer(minLength: 30)
             Text("Player 2")
-            PlayerBoardView(selectedTile: $selectedTile, numberOfPlacedTiles: $numberOfSelectedTiles)
+            PlayerBoardView(selectedTile: $selectedTile)
         }
     }
 }
 
 #Preview {
-    ContentView(numberOfSelectedTiles: 2)
+    ContentView()
 }

@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-// change to enum to amke things a bit eaiser and on var could be the contents
+// change to enum to make things a bit easier and on var could be the contents
 struct Factories {
-    var factory1: [LineOptions]
-    var factory2: [LineOptions]
-    var factory3: [LineOptions]
-    var factory4: [LineOptions]
+    var factory1: [LineOption]
+    var factory2: [LineOption]
+    var factory3: [LineOption]
+    var factory4: [LineOption]
     
-    mutating func remove(selected: LineOptions, from factory: String) -> Int {
+    mutating func remove(selected: LineOption, from factory: String) -> Int {
         var numberOfOcurrencesInFactory = 0
         switch factory {
         case "factory1":
@@ -52,11 +52,10 @@ struct FactoryView: View {
         factory4: [.blue, .white, .black, .red]
     )
     
-    @Binding var selectedTile: LineOptions
-    @Binding var numberOfSelectedTiles: Int
+    @Binding var selectedTile: LineOption
     @State private var filteredFac = []
 
-    func getTile(from factory: Array<LineOptions>, placement: Int, factoryName: String) -> some View {
+    func getTile(from factory: Array<LineOption>, placement: Int, factoryName: String) -> some View {
         guard placement <= factory.count else {
             // this should probably be and error not empty space
             return Button(action: {}, label: {
@@ -64,18 +63,20 @@ struct FactoryView: View {
                     .resizable()
                     .frame(width: 44, height: 44)
             })
+            .draggable(LineOption.emptySpace.rawValue)
         }
+        
+        let imageName = placement >= factory.count ? "emptySpace" : factory[placement].rawValue
         
         return Button(action: {
             selectedTile = factory[placement]
-            numberOfSelectedTiles = factories.remove(selected: selectedTile, from: factoryName)
         }, label: {
-            let imageName = placement >= factory.count ? "emptySpace" : factory[placement].rawValue
+            
             Image(imageName)
                 .resizable()
                 .frame(width: 44, height: 44)
         })
-        //        return Color.clear.gridCellUnsizedAxes([.horizontal, .vertical]
+        .draggable(imageName)
     }
 
     var body: some View {
@@ -149,5 +150,5 @@ enum MyError: Error {
 }
 
 #Preview {
-    FactoryView(selectedTile: .constant(.black), numberOfSelectedTiles: .constant(1))
+    FactoryView(selectedTile: .constant(.black))
 }
