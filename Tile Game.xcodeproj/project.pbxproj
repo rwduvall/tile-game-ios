@@ -11,12 +11,13 @@
 		0051D2082A36AD2D0068AE62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2072A36AD2D0068AE62 /* ContentView.swift */; };
 		0051D20A2A36AD2E0068AE62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0051D2092A36AD2E0068AE62 /* Assets.xcassets */; };
 		0051D20D2A36AD2E0068AE62 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0051D20C2A36AD2E0068AE62 /* Preview Assets.xcassets */; };
-		0051D20F2A36AD2E0068AE62 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D20E2A36AD2E0068AE62 /* Item.swift */; };
 		0051D2192A36AD2E0068AE62 /* Tile_GameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2182A36AD2E0068AE62 /* Tile_GameTests.swift */; };
 		0051D2232A36AD2E0068AE62 /* Tile_GameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2222A36AD2E0068AE62 /* Tile_GameUITests.swift */; };
 		0051D2252A36AD2E0068AE62 /* Tile_GameUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2242A36AD2E0068AE62 /* Tile_GameUITestsLaunchTests.swift */; };
 		0051D2322A36AD850068AE62 /* FactoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0051D2312A36AD850068AE62 /* FactoryView.swift */; };
 		005C51462A4299630089C010 /* WallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005C51452A4299630089C010 /* WallView.swift */; };
+		00A873FE2B755983005157A3 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A873FD2B755983005157A3 /* TileView.swift */; };
+		00A874002B75691D005157A3 /* LineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A873FF2B75691D005157A3 /* LineModel.swift */; };
 		00D0357F2A43AE4D00B74E7A /* WallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D0357E2A43AE4D00B74E7A /* WallViewModel.swift */; };
 		00E95C292A395C470031B2A3 /* PlayerBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E95C282A395C470031B2A3 /* PlayerBoardView.swift */; };
 /* End PBXBuildFile section */
@@ -44,7 +45,6 @@
 		0051D2072A36AD2D0068AE62 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0051D2092A36AD2E0068AE62 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0051D20C2A36AD2E0068AE62 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		0051D20E2A36AD2E0068AE62 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		0051D2142A36AD2E0068AE62 /* Tile GameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tile GameTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0051D2182A36AD2E0068AE62 /* Tile_GameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile_GameTests.swift; sourceTree = "<group>"; };
 		0051D21E2A36AD2E0068AE62 /* Tile GameUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tile GameUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +52,9 @@
 		0051D2242A36AD2E0068AE62 /* Tile_GameUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile_GameUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		0051D2312A36AD850068AE62 /* FactoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactoryView.swift; sourceTree = "<group>"; };
 		005C51452A4299630089C010 /* WallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallView.swift; sourceTree = "<group>"; };
+		00A873FC2B740D20005157A3 /* Tile-Game-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Tile-Game-Info.plist"; sourceTree = SOURCE_ROOT; };
+		00A873FD2B755983005157A3 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
+		00A873FF2B75691D005157A3 /* LineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineModel.swift; sourceTree = "<group>"; };
 		00D0357E2A43AE4D00B74E7A /* WallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallViewModel.swift; sourceTree = "<group>"; };
 		00E95C282A395C470031B2A3 /* PlayerBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBoardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,13 +107,16 @@
 		0051D2042A36AD2D0068AE62 /* Tile Game */ = {
 			isa = PBXGroup;
 			children = (
+				00A874012B75760F005157A3 /* Models */,
+				0051D2092A36AD2E0068AE62 /* Assets.xcassets */,
 				0051D2052A36AD2D0068AE62 /* Tile_GameApp.swift */,
 				0051D2072A36AD2D0068AE62 /* ContentView.swift */,
-				0051D2092A36AD2E0068AE62 /* Assets.xcassets */,
-				0051D20E2A36AD2E0068AE62 /* Item.swift */,
-				0051D20B2A36AD2E0068AE62 /* Preview Content */,
 				0051D2312A36AD850068AE62 /* FactoryView.swift */,
 				00E95C282A395C470031B2A3 /* PlayerBoardView.swift */,
+				00A873FF2B75691D005157A3 /* LineModel.swift */,
+				0051D20B2A36AD2E0068AE62 /* Preview Content */,
+				00A873FC2B740D20005157A3 /* Tile-Game-Info.plist */,
+				00A873FD2B755983005157A3 /* TileView.swift */,
 				005C51452A4299630089C010 /* WallView.swift */,
 				00D0357E2A43AE4D00B74E7A /* WallViewModel.swift */,
 			);
@@ -140,6 +146,13 @@
 				0051D2242A36AD2E0068AE62 /* Tile_GameUITestsLaunchTests.swift */,
 			);
 			path = "Tile GameUITests";
+			sourceTree = "<group>";
+		};
+		00A874012B75760F005157A3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,8 +287,9 @@
 			files = (
 				005C51462A4299630089C010 /* WallView.swift in Sources */,
 				0051D2082A36AD2D0068AE62 /* ContentView.swift in Sources */,
+				00A874002B75691D005157A3 /* LineModel.swift in Sources */,
+				00A873FE2B755983005157A3 /* TileView.swift in Sources */,
 				0051D2322A36AD850068AE62 /* FactoryView.swift in Sources */,
-				0051D20F2A36AD2E0068AE62 /* Item.swift in Sources */,
 				00E95C292A395C470031B2A3 /* PlayerBoardView.swift in Sources */,
 				00D0357F2A43AE4D00B74E7A /* WallViewModel.swift in Sources */,
 				0051D2062A36AD2D0068AE62 /* Tile_GameApp.swift in Sources */,
@@ -445,6 +459,7 @@
 				DEVELOPMENT_TEAM = 9BZH38B3PP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Tile-Game-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -457,9 +472,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.robbieduvall.Tile-Game";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Debug;
 		};
@@ -474,6 +492,7 @@
 				DEVELOPMENT_TEAM = 9BZH38B3PP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Tile-Game-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -486,9 +505,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.robbieduvall.Tile-Game";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Release;
 		};

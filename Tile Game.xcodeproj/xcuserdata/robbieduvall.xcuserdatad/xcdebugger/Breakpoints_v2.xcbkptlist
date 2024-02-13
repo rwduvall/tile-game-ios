@@ -3,4 +3,70 @@
    uuid = "13703B67-83D4-45E4-A637-ED6E26A585BE"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5E9515CF-661B-4F77-A56E-AFF383AA18DB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tile Game/DragAndDropTest.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "5E9515CF-661B-4F77-A56E-AFF383AA18DB - 2e30ab6706fcecda"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Array&lt;Swift.String&gt;, __C.CGPoint) -&gt; Swift.Bool in Tile_Game.DragAndDropTest.body.getter : some"
+                  moduleName = "Tile Game"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/robbieduvall/Projects/PD-Projects/Tile%20Game/Tile%20Game/DragAndDropTest.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32"
+                  offsetFromSymbolStart = "520">
+               </Location>
+               <Location
+                  uuid = "5E9515CF-661B-4F77-A56E-AFF383AA18DB - 2e30ab6706fcecda"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Array&lt;Swift.String&gt;, __C.CGPoint) -&gt; Swift.Bool in Tile_Game.DragAndDropTest.body.getter : some"
+                  moduleName = "Tile Game"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/robbieduvall/Projects/PD-Projects/Tile%20Game/Tile%20Game/DragAndDropTest.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32"
+                  offsetFromSymbolStart = "584">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B054B4E3-52FF-4042-AD27-424E8C251295"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tile Game/DragAndDropTest.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

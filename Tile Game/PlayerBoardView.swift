@@ -7,36 +7,8 @@
 
 import SwiftUI
 
-enum LineOptions: String {
-    case emptySpace = "emptySpace"
-    case blue = "blueTile"
-    case black = "blackTile"
-    case red = "redTile"
-    case white = "whiteTile"
-    case yellow = "yellowTile"
-}
-
-struct Line {
-    var numOfSpaces: Int
-    var numOfOccupiedSpaces: Int
-    var color: LineOptions
-    
-    func numberOfEmptySpaces() -> Int {
-        return numOfSpaces - numOfOccupiedSpaces
-    }
-}
-
-struct Lines {
-    var rowOne: Line
-    var rowTwo: Line
-    var rowThree: Line
-    var rowFour: Line
-    var rowFive: Line
-}
-
 struct PlayerBoardView: View {
-    @Binding var selectedTile: LineOptions
-    @Binding var numberOfPlacedTiles: Int
+    @Binding var factories: Factories
     
     @State private var playerLines: Lines = Lines(
         rowOne: Line(numOfSpaces: 1, numOfOccupiedSpaces: 0, color: .emptySpace),
@@ -46,101 +18,98 @@ struct PlayerBoardView: View {
         rowFive: Line(numOfSpaces: 5, numOfOccupiedSpaces: 0, color: .emptySpace)
     )
     @State private var wall = WallModel()
-    @State private var occupied = false
-    @State private var floorRow: [LineOptions] = []
+    @State private var floorRow: [LineOption] = []
+    @State var isDropTargeted = false
     
     func endRound() -> some View {
         Button(action: {
             switch playerLines.rowOne.color {
-                case .blue:
-                    wall.rowOne[0].occupied = true
-                case .yellow:
-                    wall.rowOne[1].occupied = true
-                case .red:
-                    wall.rowOne[2].occupied = true
-                case .black:
-                    wall.rowOne[3].occupied = true
+            case .blue:
+                wall.rowOne[0].occupied = true
+            case .yellow:
+                wall.rowOne[1].occupied = true
+            case .red:
+                wall.rowOne[2].occupied = true
+            case .black:
+                wall.rowOne[3].occupied = true
+            case .white:
+                wall.rowOne[4].occupied = true
+            case .emptySpace:
+                break
+            }
+            playerLines.rowOne.color = .emptySpace
+            playerLines.rowOne.numOfOccupiedSpaces = 0
+            
+            if (playerLines.rowTwo.color == playerLines.rowTwo.color) {
+                switch playerLines.rowTwo.color {
                 case .white:
-                    wall.rowOne[4].occupied = true
+                    wall.rowTwo[0].occupied = true
+                case .blue:
+                    wall.rowTwo[1].occupied = true
+                case .yellow:
+                    wall.rowTwo[2].occupied = true
+                case .red:
+                    wall.rowTwo[3].occupied = true
+                case .black:
+                    wall.rowTwo[4].occupied = true
                 case .emptySpace:
                     break
                 }
-                // safe to set to empty since this is line 1
-            playerLines.rowOne.color = .emptySpace
-                
-            if (playerLines.rowTwo.color == playerLines.rowTwo.color) {
-                    switch playerLines.rowTwo.color {
-                    case .white:
-                        wall.rowTwo[0].occupied = true
-                    case .blue:
-                        wall.rowTwo[1].occupied = true
-                    case .yellow:
-                        wall.rowTwo[2].occupied = true
-                    case .red:
-                        wall.rowTwo[3].occupied = true
-                    case .black:
-                        wall.rowTwo[4].occupied = true
-                    case .emptySpace:
-                        break
-                    }
-                    playerLines.rowTwo.color = .emptySpace
-                    playerLines.rowTwo.color = .emptySpace
-                }
-                // TODO: the rest of the rows
-//            }
-
+                playerLines.rowTwo.color = .emptySpace
+                playerLines.rowTwo.numOfOccupiedSpaces = 0
+            }
+            // TODO: the rest of the rows
         }, label: {
-            Text("end round")
+            Text("End round")
+            
         })
+        .buttonStyle(.bordered)
     }
     
     struct createRow: View {
+        @Binding var factories: Factories
         @Binding var line: Line
-        @Binding var numOfPlacedTiles: Int
-        @Binding var newColor: LineOptions
-        @Binding var floorTiles: [LineOptions]
+        @Binding var floorTiles: [LineOption]
         @State var isAlertShown = false
+        @State var isDropTargeted = false
         
         var body: some View {
             HStack {
-                // TODO: handle for more items than can fit
-
-                // This creates the empty spaces
-                // I have a crash here when I try to put too many things in a row, need to fix that
-                ForEach(0..<line.numberOfEmptySpaces(), id: \.self) { _ in
-                    Button(action: {
-                        guard line.color == newColor || line.color == LineOptions.emptySpace else {
-                            isAlertShown = true
-                            return
+                ForEach(0..<self.line.numberOfEmptySpaces(), id: \.self) { _ in
+                    TileView(.emptySpace)
+                        .dropDestination(for: DraggableTile.self) {
+                            receivedTile,
+                            _ in
+                            if let droppedTile = receivedTile.first {
+                                if droppedTile.color == .emptySpace {
+                                    return false
+                                }
+                                if self.line.color != .emptySpace && droppedTile.color != self.line.color {
+                                    isAlertShown = true
+                                    return false
+                                }
+                                self.line.color = droppedTile.color
+                                line.numOfOccupiedSpaces += 1
+                                
+                                // remove from factory on successful drop
+                                self.factories.remove(selected: droppedTile.color, from: droppedTile.factoryName, index: droppedTile.index)
+                                
+                                return true
+                            }
+                            return false
+                        } isTargeted: {
+                            isDropTargeted = $0
                         }
-                        
-                        line.color = newColor
-                        line.numOfOccupiedSpaces = numOfPlacedTiles + line.numOfOccupiedSpaces
-
-                        // Tiles to floor is numOfPlaced -  freeSpaces
-                        // I have a bug when the number of tiles placed = the length of the line
-                        let numberOfTilesToFLoor = numOfPlacedTiles - (line.numOfSpaces - line.numOfOccupiedSpaces)
-                        for _ in 0..<numberOfTilesToFLoor {
-                            self.floorTiles.append(newColor)
-                        }
-                    }, label: {
-                        Image(.emptySpace) // setting this color wrong
-                            .resizable()
-                            .frame(width: 44, height: 44)
-                    })
-                    .alert(isPresented: $isAlertShown, content: {
-                        Alert(title: Text("That can't go here"), message: Text("Put tiles in a differnt row that is empty or has matching colors"), dismissButton: .default(Text("OK")))
-                    })
+                        .opacity(isDropTargeted ? 0.5 : 0.9)
                 }
                 
-                // This creates the tiles in the rows
-                ForEach(0..<line.numOfOccupiedSpaces, id: \.self) { _ in
-                    // if you tap this while placing a tile the tile just goes away
-                    Image(line.color.rawValue)
-                        .resizable()
-                        .frame(width: 44, height: 44)
+                ForEach(0..<self.line.numOfOccupiedSpaces, id: \.self) { _ in
+                    TileView(self.line.color)
                 }
             }
+            .alert(isPresented: $isAlertShown, content: {
+                Alert(title: Text("That can't go here"), message: Text("Put tiles in a different row that is empty or has matching colors"), dismissButton: .default(Text("OK")))
+            })
         }
     }
     
@@ -152,44 +121,69 @@ struct PlayerBoardView: View {
                 VStack {
                     Grid(alignment: .trailing) {
                         createRow(
+                            factories: $factories,
                             line: $playerLines.rowOne,
-                            numOfPlacedTiles: $numberOfPlacedTiles,
-                            newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
+                            factories: $factories,
                             line: $playerLines.rowTwo,
-                            numOfPlacedTiles: $numberOfPlacedTiles,
-                            newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
+                            factories: $factories,
                             line: $playerLines.rowThree,
-                            numOfPlacedTiles: $numberOfPlacedTiles,
-                            newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
+                            factories: $factories,
                             line: $playerLines.rowFour,
-                            numOfPlacedTiles: $numberOfPlacedTiles,
-                            newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
+                            factories: $factories,
                             line: $playerLines.rowFive,
-                            numOfPlacedTiles: $numberOfPlacedTiles,
-                            newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                     }
                     // This creates the floor row
-                    ForEach(floorRow, id: \.self) { floorTile in
-                        Image(floorTile.rawValue)
-                            .resizable()
-                            .frame(width: 44, height: 44)
+                    HStack {
+                        Text("Floor tiles")
+                        ForEach(floorRow, id: \.self) { floorTile in
+                            TileView(floorTile)
+                        }
+                        
+                        TileView(.emptySpace)
+                            .dropDestination(for: DraggableTile.self) {
+                                receivedTile,
+                                _ in
+                                if let droppedTile = receivedTile.first {
+                                    if droppedTile.color == .emptySpace {
+                                        return false
+                                    }
+                                    
+                                    floorRow.append(droppedTile.color)
+                                    
+                                    // remove from factory on successful drop
+                                    self.factories.remove(
+                                        selected: droppedTile.color,
+                                        from: droppedTile.factoryName,
+                                        index: droppedTile.index
+                                    )
+                                    
+                                    return true
+                                }
+                                return false
+                            } isTargeted: {
+                                isDropTargeted = $0
+                            }
+                            .opacity(isDropTargeted ? 0.5 : 0.9)
                     }
                 }
-                WallView(spaceOccupied: $occupied, wall: $wall)
+                VStack {
+                    WallView(wall: $wall)
+                        .padding(.bottom, 50)
+                }
             }
         }
     }
@@ -197,5 +191,10 @@ struct PlayerBoardView: View {
 
 
 #Preview {
-    PlayerBoardView(selectedTile: .constant(LineOptions.red), numberOfPlacedTiles: .constant(1))
+    PlayerBoardView(factories: .constant(Factories(
+        factory1: [.yellow, .yellow, .black, .white],
+        factory2: [.white, .red, .black, .white],
+        factory3: [.red, .red, .yellow, .black],
+        factory4: [.blue, .white, .black, .red]
+    )))
 }
