@@ -8,45 +8,45 @@
 import Foundation
 
 struct WallModel {
-        var rowOne = [
-            Space(occupied: false, color: .blue),
-            Space(occupied: false, color: .yellow),
-            Space(occupied: false, color: .red),
-            Space(occupied: false, color: .black),
-            Space(occupied: false, color: .white)
-        ]
-        
-        var rowTwo = [
-            Space(occupied: false, color: .white),
-            Space(occupied: false, color: .blue),
-            Space(occupied: false, color: .yellow),
-            Space(occupied: false, color: .red),
-            Space(occupied: false, color: .black),
-        ]
-        
-        var rowThree = [
-            Space(occupied: false, color: .black),
-            Space(occupied: false, color: .white),
-            Space(occupied: false, color: .blue),
-            Space(occupied: false, color: .yellow),
-            Space(occupied: false, color: .red)
-        ]
-        
-        var rowFour = [
-            Space(occupied: false, color: .red),
-            Space(occupied: false, color: .black),
-            Space(occupied: false, color: .white),
-            Space(occupied: false, color: .blue),
-            Space(occupied: false, color: .yellow)
-        ]
-        
-        var rowFive = [
-            Space(occupied: false, color: .yellow),
-            Space(occupied: false, color: .red),
-            Space(occupied: false, color: .black),
-            Space(occupied: false, color: .white),
-            Space(occupied: false, color: .blue)
-        ]
+    var rowOne = [
+        Space(occupied: false, color: .blue),
+        Space(occupied: false, color: .yellow),
+        Space(occupied: false, color: .red),
+        Space(occupied: false, color: .black),
+        Space(occupied: false, color: .white)
+    ]
+    
+    var rowTwo = [
+        Space(occupied: false, color: .white),
+        Space(occupied: false, color: .blue),
+        Space(occupied: false, color: .yellow),
+        Space(occupied: false, color: .red),
+        Space(occupied: false, color: .black),
+    ]
+    
+    var rowThree = [
+        Space(occupied: false, color: .black),
+        Space(occupied: false, color: .white),
+        Space(occupied: false, color: .blue),
+        Space(occupied: false, color: .yellow),
+        Space(occupied: false, color: .red)
+    ]
+    
+    var rowFour = [
+        Space(occupied: false, color: .red),
+        Space(occupied: false, color: .black),
+        Space(occupied: false, color: .white),
+        Space(occupied: false, color: .blue),
+        Space(occupied: false, color: .yellow)
+    ]
+    
+    var rowFive = [
+        Space(occupied: false, color: .yellow),
+        Space(occupied: false, color: .red),
+        Space(occupied: false, color: .black),
+        Space(occupied: false, color: .white),
+        Space(occupied: false, color: .blue)
+    ]
     
     struct Space {
         var occupied: Bool

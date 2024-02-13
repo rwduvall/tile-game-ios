@@ -15,6 +15,5 @@ struct Tile_GameApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: Item.self)
     }
 }

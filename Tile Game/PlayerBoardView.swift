@@ -7,35 +7,8 @@
 
 import SwiftUI
 
-enum LineOption: String, Equatable {
-    case emptySpace = "emptySpace"
-    case blue = "blueTile"
-    case black = "blackTile"
-    case red = "redTile"
-    case white = "whiteTile"
-    case yellow = "yellowTile"
-}
-
-struct Line {
-    var numOfSpaces: Int
-    var numOfOccupiedSpaces: Int
-    var color: LineOption
-    
-    func numberOfEmptySpaces() -> Int {
-        return numOfSpaces - numOfOccupiedSpaces
-    }
-}
-
-struct Lines {
-    var rowOne: Line
-    var rowTwo: Line
-    var rowThree: Line
-    var rowFour: Line
-    var rowFive: Line
-}
-
 struct PlayerBoardView: View {
-    @Binding var selectedTile: LineOption
+    @Binding var factories: Factories
     
     @State private var playerLines: Lines = Lines(
         rowOne: Line(numOfSpaces: 1, numOfOccupiedSpaces: 0, color: .emptySpace),
@@ -45,57 +18,57 @@ struct PlayerBoardView: View {
         rowFive: Line(numOfSpaces: 5, numOfOccupiedSpaces: 0, color: .emptySpace)
     )
     @State private var wall = WallModel()
-    @State private var occupied = false
     @State private var floorRow: [LineOption] = []
+    @State var isDropTargeted = false
     
     func endRound() -> some View {
         Button(action: {
             switch playerLines.rowOne.color {
-                case .blue:
-                    wall.rowOne[0].occupied = true
-                case .yellow:
-                    wall.rowOne[1].occupied = true
-                case .red:
-                    wall.rowOne[2].occupied = true
-                case .black:
-                    wall.rowOne[3].occupied = true
+            case .blue:
+                wall.rowOne[0].occupied = true
+            case .yellow:
+                wall.rowOne[1].occupied = true
+            case .red:
+                wall.rowOne[2].occupied = true
+            case .black:
+                wall.rowOne[3].occupied = true
+            case .white:
+                wall.rowOne[4].occupied = true
+            case .emptySpace:
+                break
+            }
+            playerLines.rowOne.color = .emptySpace
+            playerLines.rowOne.numOfOccupiedSpaces = 0
+            
+            if (playerLines.rowTwo.color == playerLines.rowTwo.color) {
+                switch playerLines.rowTwo.color {
                 case .white:
-                    wall.rowOne[4].occupied = true
+                    wall.rowTwo[0].occupied = true
+                case .blue:
+                    wall.rowTwo[1].occupied = true
+                case .yellow:
+                    wall.rowTwo[2].occupied = true
+                case .red:
+                    wall.rowTwo[3].occupied = true
+                case .black:
+                    wall.rowTwo[4].occupied = true
                 case .emptySpace:
                     break
                 }
-                // safe to set to empty since this is line 1
-            playerLines.rowOne.color = .emptySpace
-                
-            if (playerLines.rowTwo.color == playerLines.rowTwo.color) {
-                    switch playerLines.rowTwo.color {
-                    case .white:
-                        wall.rowTwo[0].occupied = true
-                    case .blue:
-                        wall.rowTwo[1].occupied = true
-                    case .yellow:
-                        wall.rowTwo[2].occupied = true
-                    case .red:
-                        wall.rowTwo[3].occupied = true
-                    case .black:
-                        wall.rowTwo[4].occupied = true
-                    case .emptySpace:
-                        break
-                    }
-                    playerLines.rowTwo.color = .emptySpace
-                    playerLines.rowTwo.color = .emptySpace
-                }
-                // TODO: the rest of the rows
-//            }
-
+                playerLines.rowTwo.color = .emptySpace
+                playerLines.rowTwo.numOfOccupiedSpaces = 0
+            }
+            // TODO: the rest of the rows
         }, label: {
-            Text("end round")
+            Text("End round")
+            
         })
+        .buttonStyle(.bordered)
     }
     
     struct createRow: View {
+        @Binding var factories: Factories
         @Binding var line: Line
-        @Binding var newColor: LineOption
         @Binding var floorTiles: [LineOption]
         @State var isAlertShown = false
         @State var isDropTargeted = false
@@ -103,24 +76,24 @@ struct PlayerBoardView: View {
         var body: some View {
             HStack {
                 ForEach(0..<self.line.numberOfEmptySpaces(), id: \.self) { _ in
-                    Image(LineOption.emptySpace.rawValue)
-                        .resizable()
-                        .frame(width: 44, height: 44)
-                        .dropDestination(for: String.self) {
-                            receivedString,
+                    TileView(.emptySpace)
+                        .dropDestination(for: DraggableTile.self) {
+                            receivedTile,
                             _ in
-                            if let droppedTile = LineOption(
-                                rawValue: receivedString.first ?? LineOption.emptySpace.rawValue
-                            ) {
-                                if droppedTile == .emptySpace {
+                            if let droppedTile = receivedTile.first {
+                                if droppedTile.color == .emptySpace {
                                     return false
                                 }
-                                if self.line.color != .emptySpace && droppedTile != self.line.color {
+                                if self.line.color != .emptySpace && droppedTile.color != self.line.color {
                                     isAlertShown = true
                                     return false
                                 }
-                                self.line.color = droppedTile
+                                self.line.color = droppedTile.color
                                 line.numOfOccupiedSpaces += 1
+                                
+                                // remove from factory on successful drop
+                                self.factories.remove(selected: droppedTile.color, from: droppedTile.factoryName, index: droppedTile.index)
+                                
                                 return true
                             }
                             return false
@@ -131,9 +104,7 @@ struct PlayerBoardView: View {
                 }
                 
                 ForEach(0..<self.line.numOfOccupiedSpaces, id: \.self) { _ in
-                    Image(self.line.color.rawValue)
-                        .resizable()
-                        .frame(width: 44, height: 44)
+                    TileView(self.line.color)
                 }
             }
             .alert(isPresented: $isAlertShown, content: {
@@ -150,39 +121,69 @@ struct PlayerBoardView: View {
                 VStack {
                     Grid(alignment: .trailing) {
                         createRow(
+                            factories: $factories,
                             line: $playerLines.rowOne,
-                            newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
+                            factories: $factories,
                             line: $playerLines.rowTwo,
-                            newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
+                            factories: $factories,
                             line: $playerLines.rowThree,
-                            newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
+                            factories: $factories,
                             line: $playerLines.rowFour,
-                            newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                         createRow(
+                            factories: $factories,
                             line: $playerLines.rowFive,
-                            newColor: $selectedTile,
                             floorTiles: $floorRow
                         )
                     }
                     // This creates the floor row
-                    ForEach(floorRow, id: \.self) { floorTile in
-                        Image(floorTile.rawValue)
-                            .resizable()
-                            .frame(width: 44, height: 44)
+                    HStack {
+                        Text("Floor tiles")
+                        ForEach(floorRow, id: \.self) { floorTile in
+                            TileView(floorTile)
+                        }
+                        
+                        TileView(.emptySpace)
+                            .dropDestination(for: DraggableTile.self) {
+                                receivedTile,
+                                _ in
+                                if let droppedTile = receivedTile.first {
+                                    if droppedTile.color == .emptySpace {
+                                        return false
+                                    }
+                                    
+                                    floorRow.append(droppedTile.color)
+                                    
+                                    // remove from factory on successful drop
+                                    self.factories.remove(
+                                        selected: droppedTile.color,
+                                        from: droppedTile.factoryName,
+                                        index: droppedTile.index
+                                    )
+                                    
+                                    return true
+                                }
+                                return false
+                            } isTargeted: {
+                                isDropTargeted = $0
+                            }
+                            .opacity(isDropTargeted ? 0.5 : 0.9)
                     }
                 }
-                WallView(spaceOccupied: $occupied, wall: $wall)
+                VStack {
+                    WallView(wall: $wall)
+                        .padding(.bottom, 50)
+                }
             }
         }
     }
@@ -190,5 +191,10 @@ struct PlayerBoardView: View {
 
 
 #Preview {
-    PlayerBoardView(selectedTile: .constant(LineOption.red))
+    PlayerBoardView(factories: .constant(Factories(
+        factory1: [.yellow, .yellow, .black, .white],
+        factory2: [.white, .red, .black, .white],
+        factory3: [.red, .red, .yellow, .black],
+        factory4: [.blue, .white, .black, .red]
+    )))
 }
